@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotlighter1/constants.dart';
+import 'package:spotlighter1/screens/dummy_screen.dart';
 import 'package:spotlighter1/screens/home_screen.dart';
 import 'package:spotlighter1/screens/signin_screen.dart';
 
@@ -22,6 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _password = '',
       _cpassword = '',
       _errorText = '';
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   void initState() {
     _email = _password = _cpassword = _username = _errorText = '';
@@ -136,7 +139,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     print('$_email = $_password');
                     _clearTextField();
                     if (_password == _cpassword) {
-                      Navigator.pushNamed(context, HomeScreen.id);
+                      try {
+                        _auth.createUserWithEmailAndPassword(
+                            email: _email, password: _password);
+                        Navigator.pushNamed(context, DummyPage.id);
+                      } on FirebaseAuthException catch (e) {
+                        setState(() {
+                          _errorText = e.message.toString();
+                        });
+                      }
                     } else {
                       setState(() {
                         _errorText = 'Password doesn\'t match';

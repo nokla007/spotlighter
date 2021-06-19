@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotlighter1/constants.dart';
+import 'package:spotlighter1/screens/dummy_screen.dart';
 import 'package:spotlighter1/screens/home_screen.dart';
 import 'package:spotlighter1/screens/signup_screen.dart';
 
@@ -104,7 +105,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 try {
                   await _auth.signInWithEmailAndPassword(
                       email: _email, password: _password);
-                  Navigator.pushNamed(context, HomeScreen.id);
+                  Navigator.pushNamed(context, DummyPage.id);
                 } on FirebaseAuthException catch (e) {
                   setState(() {
                     _errorText = e.message.toString();

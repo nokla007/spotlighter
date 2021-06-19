@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:spotlighter1/screens/dummy_screen.dart';
 import 'package:spotlighter1/screens/home_screen.dart';
 import 'package:spotlighter1/screens/settings_screen.dart';
 import 'package:spotlighter1/screens/signin_screen.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         SignUpScreen.id: (context) => SignUpScreen(),
         HomeScreen.id: (context) => HomeScreen(),
         SettingsScreen.id: (context) => SettingsScreen(),
+        DummyPage.id : (context) => DummyPage(),
       },
     );
   }
