@@ -1,5 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:spotlighter1/screens/home_screen.dart';
+import 'package:spotlighter1/screens/settings_screen.dart';
+import 'package:spotlighter1/screens/signin_screen.dart';
+import 'package:spotlighter1/screens/signup_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +20,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: EmptyPage(),
+      home: SignInScreen(),
+      routes: {
+        SignInScreen.id: (context) => SignInScreen(),
+        SignUpScreen.id: (context) => SignUpScreen(),
+        HomeScreen.id: (context) => HomeScreen(),
+        SettingsScreen.id: (context) => SettingsScreen(),
+      },
     );
   }
 }
