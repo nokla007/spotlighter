@@ -19,15 +19,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
       ),
-      home: SignInScreen(),
+      home: HomeScreen(),
       routes: {
         SignInScreen.id: (context) => SignInScreen(),
         SignUpScreen.id: (context) => SignUpScreen(),
         HomeScreen.id: (context) => HomeScreen(),
         SettingsScreen.id: (context) => SettingsScreen(),
-        DummyPage.id : (context) => DummyPage(),
+        DummyPage.id: (context) => DummyPage(),
       },
     );
   }
