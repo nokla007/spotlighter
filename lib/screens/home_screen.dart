@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:spotlighter1/screens/note_editor.dart';
 import 'package:spotlighter1/screens/notes_page.dart';
 import 'package:spotlighter1/screens/tasks_page.dart';
 
@@ -17,10 +19,14 @@ class _HomeScreenState extends State<HomeScreen> {
     'Tasks',
   ];
 
-  static const List<Widget> _page = [
-    NotesPage(),
-    TasksPage(),
-  ];
+  Widget getPage(int index) {
+    if (index == 0)
+      return NotesPage();
+    else if (index == 1)
+      return TasksPage();
+    else
+      return Text('Something went wrong');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +35,23 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           _titles[_selectedIndex],
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              try {
+                await FirebaseAuth.instance.signOut();
+                // Navigator.of(context).pushNamedAndRemoveUntil(
+                //     SignInScreen.id, (route) => false);
+              } on FirebaseAuthException catch (e) {
+                print(e.message);
+              }
+            },
+            icon: Icon(Icons.logout_rounded),
+          )
+        ],
       ),
-      body: _page[_selectedIndex],
+      // body: _page[_selectedIndex],
+      body: getPage(_selectedIndex),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         notchMargin: 4,
@@ -39,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.note_alt,
+                Icons.note_alt_outlined,
               ),
               label: 'Notes',
             ),
@@ -56,13 +77,34 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          print('add pressed');
-        },
-      ),
+      floatingActionButton: Fab(index: _selectedIndex),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+}
+
+class Fab extends StatelessWidget {
+  const Fab({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      onPressed: () {
+        print('add pressed');
+        if (index == 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => NoteEditor(),
+            ),
+          );
+        }
+      },
     );
   }
 }

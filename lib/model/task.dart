@@ -1,9 +1,14 @@
-import 'package:flutter/scheduler.dart';
-
 class Note {
   final String userID, title;
   bool isDone = false, highPriority = false;
-  Note({required this.userID, required this.title, highPriority = false, isDone = false});
+    final DateTime createdTime;
+  Note({
+    DateTime? creationTime,
+    required this.userID,
+    required this.title,
+    highPriority = false,
+    isDone = false,
+  }) : createdTime = creationTime ?? DateTime.now();
 
   factory Note.fromMap(Map data) {
     return Note(
@@ -11,6 +16,7 @@ class Note {
       title: data['title'] ?? '',
       highPriority: data['priority'] ?? false,
       isDone: data['isDone'] ?? false,
+      creationTime: data['created'],
     );
   }
   Map<String, dynamic> toMap() {
@@ -19,6 +25,7 @@ class Note {
       'title': title,
       'priority': highPriority,
       'isDone': isDone,
+      'created': createdTime,
     };
   }
 }

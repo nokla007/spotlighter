@@ -1,190 +1,151 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotlighter1/constants.dart';
-import 'package:spotlighter1/screens/dummy_screen.dart';
-import 'package:spotlighter1/screens/home_screen.dart';
-import 'package:spotlighter1/screens/signin_screen.dart';
 
-class SignUpScreen extends StatefulWidget {
-  static const String id = 'signupScreen';
 
-  const SignUpScreen({Key? key}) : super(key: key);
+class SignUpPage extends StatelessWidget {
+  final Function onError;
+  final Function togglePage;
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _cpasswordController = TextEditingController();
+  final auth;
+  final errorText;
 
-  @override
-  _SignUpScreenState createState() => _SignUpScreenState();
-}
-
-class _SignUpScreenState extends State<SignUpScreen> {
-  var _emailController,
-      _passwordController,
-      _cpasswordController,
-      _usernameController;
-  String _username = '',
-      _email = '',
-      _password = '',
-      _cpassword = '',
-      _errorText = '';
-  FirebaseAuth _auth = FirebaseAuth.instance;
-
-  void initState() {
-    _email = _password = _cpassword = _username = _errorText = '';
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-    _cpasswordController = TextEditingController();
-    _usernameController = TextEditingController();
-    super.initState();
-  }
-
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _cpasswordController.dispose();
-    _usernameController.dispose();
-    super.dispose();
-  }
+  SignUpPage(
+      {Key? key,
+      required this.auth,
+      required this.onError,
+      required this.togglePage,
+      required this.errorText})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Sign Up',
-                  style: TextStyle(fontSize: 50),
-                ),
-                SizedBox(
-                  height: 2 * kFormFieldSpacing,
-                ),
-                TextFormField(
-                  textAlign: TextAlign.center,
-                  controller: _usernameController,
-                  decoration: InputDecoration(
-                    labelText: 'Username',
-                  ),
-                  onChanged: (value) {
-                    _email = value;
-                  },
-                ),
-                SizedBox(
-                  height: kFormFieldSpacing,
-                ),
-                TextFormField(
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.emailAddress,
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                  ),
-                  onChanged: (value) {
-                    _email = value;
-                  },
-                ),
-                SizedBox(
-                  height: kFormFieldSpacing,
-                ),
-                TextFormField(
-                  textAlign: TextAlign.center,
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                  ),
-                  obscureText: true,
-                  onChanged: (value) {
-                    _password = value;
-                  },
-                ),
-                SizedBox(
-                  height: kFormFieldSpacing,
-                ),
-                TextFormField(
-                  textAlign: TextAlign.center,
-                  controller: _cpasswordController,
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Password',
-                  ),
-                  obscureText: true,
-                  onChanged: (value) {
-                    _cpassword = value;
-                  },
-                ),
-                SizedBox(
-                  height: 2.5 * kFormFieldSpacing,
-                  child: Center(
-                    child: Text(
-                      _errorText,
-                      //textAlign: TextAlign.center,
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      'Sign Up',
-                      style: TextStyle(fontSize: 24),
-                    ),
-                  ),
-                  onPressed: () {
-                    print('$_email = $_password');
-                    _clearTextField();
-                    if (_password == _cpassword) {
-                      try {
-                        _auth.createUserWithEmailAndPassword(
-                            email: _email, password: _password);
-                        Navigator.pushNamed(context, DummyPage.id);
-                      } on FirebaseAuthException catch (e) {
-                        setState(() {
-                          _errorText = e.message.toString();
-                        });
-                      }
-                    } else {
-                      setState(() {
-                        _errorText = 'Password doesn\'t match';
-                      });
-                    }
-                  },
-                ),
-                SizedBox(
-                  height: kFormFieldSpacing,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Already have an account?'),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              SignInScreen.id, (route) => false);
-                        },
-                        child: Text(
-                          'Sign In!',
-                          style: TextStyle(color: Colors.red),
-                        ))
-                  ],
-                )
-              ],
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Sign Up',
+              style: TextStyle(fontSize: 50),
             ),
-          ),
+            SizedBox(
+              height: 2 * kFormFieldSpacing,
+            ),
+            TextFormField(
+              textAlign: TextAlign.center,
+              controller: _usernameController,
+              decoration: InputDecoration(
+                labelText: 'Username',
+              ),
+            ),
+            SizedBox(
+              height: kFormFieldSpacing,
+            ),
+            TextFormField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.emailAddress,
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: 'Email',
+              ),
+            ),
+            SizedBox(
+              height: kFormFieldSpacing,
+            ),
+            TextFormField(
+              textAlign: TextAlign.center,
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
+              ),
+              obscureText: true,
+            ),
+            SizedBox(
+              height: kFormFieldSpacing,
+            ),
+            TextFormField(
+              textAlign: TextAlign.center,
+              controller: _cpasswordController,
+              decoration: InputDecoration(
+                labelText: 'Confirm Password',
+              ),
+              obscureText: true,
+            ),
+            SizedBox(
+              height: 2.5 * kFormFieldSpacing,
+              child: Center(
+                child: Text(
+                  errorText,
+                  //textAlign: TextAlign.center,
+                  maxLines: 2,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ),
+            //Elevated Button
+            ElevatedButton(
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'Sign Up',
+                  style: TextStyle(fontSize: 24),
+                ),
+              ),
+              onPressed: () async {
+                if (_passwordController.text == _cpasswordController.text) {
+                  try {
+                    await auth
+                        .createUserWithEmailAndPassword(
+                            email: _emailController.text,
+                            password: _passwordController.text)
+                        .then((value) async {
+                      await FirebaseFirestore.instance
+                          .collection('userData')
+                          .doc(value.user!.uid)
+                          .set({'userName': _usernameController.text});
+                    }).catchError((e) {
+                      onError(e.message);
+                    });
+                    //Navigator.pushNamed(context, DummyPage.id);
+                  } on FirebaseAuthException catch (e) {
+                    onError(e.message);
+                  } on FirebaseException catch (e) {
+                    onError(e.message);
+                  }
+                } else {
+                  onError("Password doesn't match");
+                }
+              },
+            ),
+            SizedBox(
+              height: kFormFieldSpacing,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Already have an account?'),
+                TextButton(
+                    onPressed: () {
+                      togglePage();
+                    },
+                    child: Text(
+                      'Sign In!',
+                      style: TextStyle(color: Colors.red),
+                    ))
+              ],
+            )
+          ],
         ),
       ),
     );
-  }
-
-  void _clearTextField() {
-    _emailController.clear();
-    _passwordController.clear();
-    _usernameController.clear();
-    _cpasswordController.clear();
   }
 }

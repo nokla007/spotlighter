@@ -1,44 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotlighter1/constants.dart';
-import 'package:spotlighter1/screens/dummy_screen.dart';
-import 'package:spotlighter1/screens/home_screen.dart';
-import 'package:spotlighter1/screens/signup_screen.dart';
 
-class SignInScreen extends StatefulWidget {
-  static const String id = 'signinScreen';
+class SignInPage extends StatelessWidget {
+  final Function onError;
+  final Function togglePage;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final FirebaseAuth auth;
+  final String errorText;
 
-  SignInScreen({Key? key}) : super(key: key);
-
-  @override
-  _SignInScreenState createState() => _SignInScreenState();
-}
-
-class _SignInScreenState extends State<SignInScreen> {
-  var _emailController, _passwordController;
-  String _email = '', _password = '', _errorText = '';
-  FirebaseAuth _auth = FirebaseAuth.instance;
-
-  @override
-  void initState() {
-    _email = _password = _errorText = '';
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  SignInPage(
+      {Key? key,
+      required this.auth,
+      required this.onError,
+      required this.togglePage,
+      required this.errorText})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(20),
+    return Center(
+      child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -57,9 +40,6 @@ class _SignInScreenState extends State<SignInScreen> {
               decoration: InputDecoration(
                 labelText: 'Email',
               ),
-              onChanged: (value) {
-                _email = value;
-              },
             ),
             SizedBox(
               height: kFormFieldSpacing,
@@ -71,15 +51,12 @@ class _SignInScreenState extends State<SignInScreen> {
                 labelText: 'Password',
               ),
               obscureText: true,
-              onChanged: (value) {
-                _password = value;
-              },
             ),
             SizedBox(
               height: 2.5 * kFormFieldSpacing,
               child: Center(
                 child: Text(
-                  _errorText,
+                  errorText,
                   //textAlign: TextAlign.center,
                   maxLines: 2,
                   style: TextStyle(
@@ -99,17 +76,13 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
               onPressed: () async {
-                print('$_email = $_password');
-                _clearTextField();
-
                 try {
-                  await _auth.signInWithEmailAndPassword(
-                      email: _email, password: _password);
-                  Navigator.pushNamed(context, DummyPage.id);
+                  await auth.signInWithEmailAndPassword(
+                      email: _emailController.text,
+                      password: _passwordController.text);
+                  //Navigator.pushNamed(context, DummyPage.id);
                 } on FirebaseAuthException catch (e) {
-                  setState(() {
-                    _errorText = e.message.toString();
-                  });
+                  onError(e.message);
                 }
               },
             ),
@@ -122,7 +95,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 Text('Don\'t have an account?'),
                 TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, SignUpScreen.id);
+                      togglePage();
                     },
                     child: Text(
                       'Sign Up!',
@@ -134,10 +107,5 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
     );
-  }
-
-  void _clearTextField() {
-    _emailController.clear();
-    _passwordController.clear();
   }
 }

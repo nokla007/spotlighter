@@ -1,10 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:spotlighter1/screens/dummy_screen.dart';
+import 'package:spotlighter1/screens/authentication_screen.dart';
 import 'package:spotlighter1/screens/home_screen.dart';
-import 'package:spotlighter1/screens/settings_screen.dart';
-import 'package:spotlighter1/screens/signin_screen.dart';
-import 'package:spotlighter1/screens/signup_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +12,7 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,14 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),
-      home: HomeScreen(),
-      routes: {
-        SignInScreen.id: (context) => SignInScreen(),
-        SignUpScreen.id: (context) => SignUpScreen(),
-        HomeScreen.id: (context) => HomeScreen(),
-        SettingsScreen.id: (context) => SettingsScreen(),
-        DummyPage.id: (context) => DummyPage(),
-      },
+      home: AuthenticationWraper(),
     );
   }
 }
@@ -42,6 +34,26 @@ class EmptyPage extends StatelessWidget {
       body: Center(
         child: Text('Project Initialized'),
       ),
+    );
+  }
+}
+
+class AuthenticationWraper extends StatelessWidget {
+  const AuthenticationWraper({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          print('logged in');
+          return HomeScreen();
+        } else {
+          print('not logged in');
+          return AuthScreen();
+        }
+      },
     );
   }
 }
