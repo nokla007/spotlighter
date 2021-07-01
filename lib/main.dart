@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spotlighter1/providers/auth_mode_provider.dart';
 import 'package:spotlighter1/screens/authentication_screen.dart';
 import 'package:spotlighter1/screens/home_screen.dart';
+import 'package:spotlighter1/services/firebase_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,12 +19,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
+    return MultiProvider(
+      providers: [
+        Provider<FirebaseService>(
+          create: (context) => FirebaseService(
+              FirebaseAuth.instance, FirebaseFirestore.instance),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AuthModeProvider(true),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.grey,
+        ),
+        home: AuthenticationWraper(),
       ),
-      home: AuthenticationWraper(),
     );
   }
 }
@@ -44,7 +59,7 @@ class AuthenticationWraper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+      stream: Provider.of<FirebaseService>(context).authState,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           print('logged in');

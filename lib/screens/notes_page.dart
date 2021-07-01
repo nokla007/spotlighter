@@ -9,7 +9,7 @@ class NotesPage extends StatelessWidget {
       : _uid = FirebaseAuth.instance.currentUser!.uid.toString(),
         super(key: key);
   final _db = FirebaseFirestore.instance.collection('notes');
-  String _uid;
+  final String _uid;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -17,7 +17,7 @@ class NotesPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasError) return Text('Something went wrong');
         if (snapshot.connectionState == ConnectionState.waiting)
-          return Text("Loading");
+          return Center(child: Text("Loading"));
         if (!snapshot.hasData)
           return Center(
             child: Text('No data'),
@@ -37,7 +37,6 @@ class NotesPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) => NoteEditor(
-                            editing: true,
                             id: doc.id,
                             note: Note.fromMap(data),
                           ),
@@ -57,7 +56,7 @@ class NoteGrid extends StatelessWidget {
   NoteGrid({required this.note, required this.id, required this.onTapFunction});
   final String id;
   final Note note;
-  VoidCallback onTapFunction;
+  final VoidCallback onTapFunction;
   @override
   Widget build(BuildContext context) {
     return InkWell(

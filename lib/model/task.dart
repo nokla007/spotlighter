@@ -1,22 +1,23 @@
-class Note {
-  final String userID, title;
+class Task {
+  final String userID;
+  String title;
   bool isDone = false, highPriority = false;
-    final DateTime createdTime;
-  Note({
+  final DateTime createdTime;
+  Task({
     DateTime? creationTime,
     required this.userID,
     required this.title,
-    highPriority = false,
-    isDone = false,
+    this.highPriority = false,
+    this.isDone = false,
   }) : createdTime = creationTime ?? DateTime.now();
 
-  factory Note.fromMap(Map data) {
-    return Note(
+  factory Task.fromMap(Map data) {
+    return Task(
       userID: data['userID'] ?? '',
       title: data['title'] ?? '',
       highPriority: data['priority'] ?? false,
       isDone: data['isDone'] ?? false,
-      creationTime: data['created'],
+      creationTime: data['created'].toDate() ?? DateTime.now(),
     );
   }
   Map<String, dynamic> toMap() {
@@ -27,5 +28,10 @@ class Note {
       'isDone': isDone,
       'created': createdTime,
     };
+  }
+
+  void update(String title, bool highPriority) {
+    this.title = title;
+    this.highPriority = highPriority;
   }
 }

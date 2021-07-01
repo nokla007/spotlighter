@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Note {
-  final String userID ;
+  final String userID;
   String title, text;
   bool pin = false;
   final DateTime createdTime;
@@ -19,7 +17,7 @@ class Note {
       title: data['title'] ?? '',
       text: data['text'] ?? '',
       pin: data['pin'] ?? false,
-      creationTime: data['created'].toDate(),
+      creationTime: data['created'].toDate() ?? DateTime.now(),
     );
   }
 
@@ -31,5 +29,11 @@ class Note {
       'pin': pin,
       'created': createdTime,
     };
+  }
+
+  void update(String title, String text, bool pin) {
+    this.title = title;
+    this.text = text;
+    this.pin = pin;
   }
 }

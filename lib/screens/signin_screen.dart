@@ -1,22 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spotlighter1/constants.dart';
+import 'package:spotlighter1/providers/auth_mode_provider.dart';
+import 'package:spotlighter1/services/firebase_service.dart';
 
 class SignInPage extends StatelessWidget {
-  final Function onError;
-  final Function togglePage;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final FirebaseAuth auth;
-  final String errorText;
 
-  SignInPage(
-      {Key? key,
-      required this.auth,
-      required this.onError,
-      required this.togglePage,
-      required this.errorText})
-      : super(key: key);
+  SignInPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +19,11 @@ class SignInPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
+            const Text(
               'Sign In',
               style: TextStyle(fontSize: 50),
             ),
-            SizedBox(
+            const SizedBox(
               height: 2 * kFormFieldSpacing,
             ),
             TextFormField(
@@ -41,7 +34,7 @@ class SignInPage extends StatelessWidget {
                 labelText: 'Email',
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: kFormFieldSpacing,
             ),
             TextFormField(
@@ -56,7 +49,7 @@ class SignInPage extends StatelessWidget {
               height: 2.5 * kFormFieldSpacing,
               child: Center(
                 child: Text(
-                  errorText,
+                  context.watch<AuthModeProvider>().errorText,
                   //textAlign: TextAlign.center,
                   maxLines: 2,
                   style: TextStyle(
@@ -68,7 +61,7 @@ class SignInPage extends StatelessWidget {
             ),
             //Elevated Button
             ElevatedButton(
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.all(10),
                 child: Text(
                   'Sign In',
@@ -77,27 +70,30 @@ class SignInPage extends StatelessWidget {
               ),
               onPressed: () async {
                 try {
-                  await auth.signInWithEmailAndPassword(
+                  await context.read<FirebaseService>().signIn(
                       email: _emailController.text,
                       password: _passwordController.text);
-                  //Navigator.pushNamed(context, DummyPage.id);
                 } on FirebaseAuthException catch (e) {
-                  onError(e.message);
+                  //onError(e.message);
+                  String error =
+                      context.read<FirebaseService>().showError(e.code);
+                  context.read<AuthModeProvider>().setError(error);
+                  print('error');
                 }
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: kFormFieldSpacing,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Don\'t have an account?'),
+                const Text('Don\'t have an account?'),
                 TextButton(
                     onPressed: () {
-                      togglePage();
+                      context.read<AuthModeProvider>().toggleState();
                     },
-                    child: Text(
+                    child: const Text(
                       'Sign Up!',
                       style: TextStyle(color: Colors.red),
                     ))

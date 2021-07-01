@@ -2,24 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotlighter1/constants.dart';
-
+import 'package:provider/provider.dart';
+import 'package:spotlighter1/providers/auth_mode_provider.dart';
+import 'package:spotlighter1/services/firebase_service.dart';
 
 class SignUpPage extends StatelessWidget {
-  final Function onError;
-  final Function togglePage;
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _cpasswordController = TextEditingController();
-  final auth;
-  final errorText;
 
-  SignUpPage(
-      {Key? key,
-      required this.auth,
-      required this.onError,
-      required this.togglePage,
-      required this.errorText})
+  SignUpPage({Key? key,})
       : super(key: key);
 
   @override
@@ -30,11 +23,11 @@ class SignUpPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(
+            const Text(
               'Sign Up',
               style: TextStyle(fontSize: 50),
             ),
-            SizedBox(
+            const SizedBox(
               height: 2 * kFormFieldSpacing,
             ),
             TextFormField(
@@ -44,7 +37,7 @@ class SignUpPage extends StatelessWidget {
                 labelText: 'Username',
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: kFormFieldSpacing,
             ),
             TextFormField(
@@ -55,7 +48,7 @@ class SignUpPage extends StatelessWidget {
                 labelText: 'Email',
               ),
             ),
-            SizedBox(
+            const  SizedBox(
               height: kFormFieldSpacing,
             ),
             TextFormField(
@@ -66,7 +59,7 @@ class SignUpPage extends StatelessWidget {
               ),
               obscureText: true,
             ),
-            SizedBox(
+            const SizedBox(
               height: kFormFieldSpacing,
             ),
             TextFormField(
@@ -81,7 +74,7 @@ class SignUpPage extends StatelessWidget {
               height: 2.5 * kFormFieldSpacing,
               child: Center(
                 child: Text(
-                  errorText,
+                  context.watch<AuthModeProvider>().errorText,
                   //textAlign: TextAlign.center,
                   maxLines: 2,
                   style: TextStyle(
@@ -93,7 +86,7 @@ class SignUpPage extends StatelessWidget {
             ),
             //Elevated Button
             ElevatedButton(
-              child: Padding(
+              child: const Padding(
                 padding: EdgeInsets.all(10),
                 child: Text(
                   'Sign Up',
@@ -103,41 +96,38 @@ class SignUpPage extends StatelessWidget {
               onPressed: () async {
                 if (_passwordController.text == _cpasswordController.text) {
                   try {
-                    await auth
-                        .createUserWithEmailAndPassword(
-                            email: _emailController.text,
-                            password: _passwordController.text)
-                        .then((value) async {
-                      await FirebaseFirestore.instance
-                          .collection('userData')
-                          .doc(value.user!.uid)
-                          .set({'userName': _usernameController.text});
-                    }).catchError((e) {
-                      onError(e.message);
-                    });
-                    //Navigator.pushNamed(context, DummyPage.id);
+                    await context.read<FirebaseService>().signUp(
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                        username: _usernameController.text);
                   } on FirebaseAuthException catch (e) {
-                    onError(e.message);
+                    String error =
+                        context.read<FirebaseService>().showError(e.code);
+                    context.read<AuthModeProvider>().setError(error);
+                    print('error');
                   } on FirebaseException catch (e) {
-                    onError(e.message);
+                    String error =
+                        context.read<FirebaseService>().showError(e.code);
+                    context.read<AuthModeProvider>().setError(error);
+                    print('error');
                   }
                 } else {
-                  onError("Password doesn't match");
+                  context.read<AuthModeProvider>().setError("Password doesn't match");
                 }
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: kFormFieldSpacing,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Already have an account?'),
+                const Text('Already have an account?'),
                 TextButton(
                     onPressed: () {
-                      togglePage();
+                      context.read<AuthModeProvider>().toggleState();
                     },
-                    child: Text(
+                    child: const Text(
                       'Sign In!',
                       style: TextStyle(color: Colors.red),
                     ))

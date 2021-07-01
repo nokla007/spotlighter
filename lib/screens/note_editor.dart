@@ -4,58 +4,36 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotlighter1/model/note.dart';
+import 'package:provider/provider.dart';
+import 'package:spotlighter1/services/firebase_service.dart';
 
 class NoteEditor extends StatefulWidget {
-  Note? note;
+
   static final String uid = FirebaseAuth.instance.currentUser!.uid.toString();
   NoteEditor({
-    this.editing = false,
     this.note,
     this.id,
   });
-  final bool editing;
-  String? id;
+  final Note? note;
+  final String? id;
   @override
-  _TaskEditorState createState() => _TaskEditorState();
+  _NoteEditorState createState() => _NoteEditorState();
 
-  void addNote(String title, String text, bool pinned) {
-    note = Note(userID: uid, title: title, text: text, pin: pinned);
-    try {
-      FirebaseFirestore.instance.collection('notes').add(note!.toMap());
-    } on FirebaseException catch (e) {
-      print(e.message);
-    }
-  }
-
-  void editNote(String title, String text, bool pinned) {
-    if (note != null && id != null) {
-      note!.title = title;
-      note!.text = text;
-      note!.pin = pinned;
-      try {
-        FirebaseFirestore.instance
-            .collection('notes')
-            .doc(id)
-            .update(note!.toMap());
-      } on FirebaseException catch (e) {
-        print(e.message);
-      }
-    }
-  }
 }
 
-class _TaskEditorState extends State<NoteEditor> {
+class _NoteEditorState extends State<NoteEditor> {
   late TextEditingController _titleControler, _textControler;
   bool _pinned = false;
+  bool _editing = false;
 
   @override
   void initState() {
-    bool isNote = (widget.note != null);
+    _editing = (widget.note != null);
+    _pinned = (_editing) ? widget.note!.pin : false;
     _titleControler =
-        TextEditingController(text: (isNote) ? widget.note!.title : '');
+        TextEditingController(text: (_editing) ? widget.note!.title : '');
     _textControler =
-        TextEditingController(text: (isNote) ? widget.note!.text : '');
-    _pinned = (isNote) ? widget.note!.pin : false;
+        TextEditingController(text: (_editing) ? widget.note!.text : '');
     super.initState();
   }
 
@@ -70,7 +48,7 @@ class _TaskEditorState extends State<NoteEditor> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: (!widget.editing) ? Text('Add Note') : null,
+        title: (!_editing) ? Text('Add Note') : null,
         backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: Icon(Icons.close),
@@ -79,20 +57,31 @@ class _TaskEditorState extends State<NoteEditor> {
           },
         ),
         actions: [
-          if (widget.editing == true)
+          if (_editing)
             IconButton(
-                onPressed: () {
-                  print('delete');
-                },
-                icon: Icon(Icons.delete_rounded)),
+              onPressed: () {
+                print('delete note');
+              },
+              icon: Icon(Icons.delete_rounded),
+            ),
           IconButton(
-            onPressed: () {
-              if (widget.editing) {
-                widget.editNote(
-                    _titleControler.text, _textControler.text, _pinned);
+            onPressed: () async {
+              if (_editing) {
+                Note note = widget.note!;
+                note.update(_titleControler.text, _textControler.text, _pinned);
+                try {
+                  context.read<FirebaseService>().editNote(note, widget.id);
+                } on FirebaseException catch (e) {
+                  print(e.message);
+                }
               } else {
-                widget.addNote(
-                    _titleControler.text, _textControler.text, _pinned);
+                Note newNote = Note(userID: context.read<FirebaseService>().getUID, title: _titleControler.text, text: _textControler.text, pin: _pinned,);
+                try {
+                  context.read<FirebaseService>().createNote(newNote);
+                } on FirebaseException catch (e) {
+                  print(e.message);
+                }
+
               }
               Navigator.pop(context);
             },
@@ -108,6 +97,7 @@ class _TaskEditorState extends State<NoteEditor> {
               padding: const EdgeInsets.all(10.0),
               child: TextField(
                 controller: _titleControler,
+                textCapitalization: TextCapitalization.sentences,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
@@ -123,6 +113,7 @@ class _TaskEditorState extends State<NoteEditor> {
               padding: const EdgeInsets.all(10.0),
               child: TextField(
                 controller: _textControler,
+                textCapitalization: TextCapitalization.sentences,
                 maxLines: 12,
                 style: TextStyle(
                   fontSize: 18,
@@ -145,13 +136,14 @@ class _TaskEditorState extends State<NoteEditor> {
                   style: TextStyle(fontSize: 20),
                 ),
                 Switch(
-                    value: _pinned,
-                    onChanged: (bool value) {
-                      setState(() {
-                        _pinned = value;
-                      });
-                      print(_pinned);
-                    })
+                  value: _pinned,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _pinned = value;
+                    });
+                    print(_pinned);
+                  },
+                )
               ],
             )
           ],

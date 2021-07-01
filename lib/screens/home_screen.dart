@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spotlighter1/screens/note_editor.dart';
 import 'package:spotlighter1/screens/notes_page.dart';
+import 'package:spotlighter1/screens/task_editor.dart';
 import 'package:spotlighter1/screens/tasks_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -54,9 +55,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: getPage(_selectedIndex),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
-        notchMargin: 4,
+        notchMargin: 6,
         clipBehavior: Clip.antiAlias,
         child: BottomNavigationBar(
+          backgroundColor: Colors.grey[100],
           items: [
             BottomNavigationBarItem(
               icon: Icon(
@@ -101,6 +103,13 @@ class Fab extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (BuildContext context) => NoteEditor(),
+            ),
+          );
+        } else if (index == 1) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => TaskEditor(),
             ),
           );
         }
