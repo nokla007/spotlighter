@@ -34,4 +34,8 @@ class Task {
     this.title = title;
     this.highPriority = highPriority;
   }
+
+  void toggleDone(bool? done) {
+    if (done != null) this.isDone = done;
+  }
 }

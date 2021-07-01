@@ -7,25 +7,31 @@ class FirebaseService {
   final FirebaseAuth _auth;
   final FirebaseFirestore _db;
 
-
   FirebaseService(this._auth, this._db);
 
   Stream<User?> get authState => _auth.authStateChanges();
 
   String get getUID => _auth.currentUser!.uid;
 
-  Stream get notestream => _db
+  String? get getEmail => _auth.currentUser!.email;
+
+  Stream<QuerySnapshot> get notestream => _db
       .collection('notes')
       .where('userID', isEqualTo: _auth.currentUser!.uid)
+      .orderBy('created', descending: false)
       .snapshots();
 
-  Stream get taskstream => _db
+  Stream<QuerySnapshot> get taskstream => _db
       .collection('tasks')
       .where('userID', isEqualTo: _auth.currentUser!.uid)
       .snapshots();
 
   Future<void> signOut() async {
-    await _auth.signOut();
+    try {
+      await _auth.signOut();
+    } on FirebaseAuthException catch (e) {
+      throw e;
+    }
   }
 
   Future<void> signIn({required String email, required String password}) async {
@@ -73,6 +79,14 @@ class FirebaseService {
     }
   }
 
+  Future<void> deleteNote(String? id) async {
+    try {
+      await _db.collection('notes').doc(id).delete();
+    } on FirebaseException catch (e) {
+      throw e;
+    }
+  }
+
   Future<void> createTask(Task task) async {
     try {
       await _db.collection('tasks').add(task.toMap());
@@ -84,6 +98,14 @@ class FirebaseService {
   Future<void> editTask(Task task, String? id) async {
     try {
       await _db.collection('tasks').doc(id).update(task.toMap());
+    } on FirebaseException catch (e) {
+      throw e;
+    }
+  }
+
+  Future<void> deleteTask(String? id) async {
+    try {
+      await _db.collection('tasks').doc(id).delete();
     } on FirebaseException catch (e) {
       throw e;
     }

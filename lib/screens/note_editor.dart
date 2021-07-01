@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:spotlighter1/services/firebase_service.dart';
 
 class NoteEditor extends StatefulWidget {
-
   static final String uid = FirebaseAuth.instance.currentUser!.uid.toString();
   NoteEditor({
     this.note,
@@ -18,7 +17,6 @@ class NoteEditor extends StatefulWidget {
   final String? id;
   @override
   _NoteEditorState createState() => _NoteEditorState();
-
 }
 
 class _NoteEditorState extends State<NoteEditor> {
@@ -60,7 +58,39 @@ class _NoteEditorState extends State<NoteEditor> {
           if (_editing)
             IconButton(
               onPressed: () {
-                print('delete note');
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Delete Note?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          if (_editing) {
+                            try {
+                              context
+                                  .read<FirebaseService>()
+                                  .deleteNote(widget.id);
+                              Navigator.pop(context);
+                            } on FirebaseAuthException catch (e) {
+                              print(e.message);
+                            }
+                          }
+                        },
+                        child: Text('Ok'),
+                      ),
+                    ],
+                  ),
+                );
               },
               icon: Icon(Icons.delete_rounded),
             ),
@@ -75,13 +105,17 @@ class _NoteEditorState extends State<NoteEditor> {
                   print(e.message);
                 }
               } else {
-                Note newNote = Note(userID: context.read<FirebaseService>().getUID, title: _titleControler.text, text: _textControler.text, pin: _pinned,);
+                Note newNote = Note(
+                  userID: context.read<FirebaseService>().getUID,
+                  title: _titleControler.text,
+                  text: _textControler.text,
+                  pin: _pinned,
+                );
                 try {
                   context.read<FirebaseService>().createNote(newNote);
                 } on FirebaseException catch (e) {
                   print(e.message);
                 }
-
               }
               Navigator.pop(context);
             },

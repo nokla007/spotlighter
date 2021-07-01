@@ -1,21 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:spotlighter1/model/note.dart';
 import 'package:spotlighter1/screens/note_editor.dart';
+import 'package:spotlighter1/services/firebase_service.dart';
 
 class NotesPage extends StatelessWidget {
-  NotesPage({Key? key})
-      : _uid = FirebaseAuth.instance.currentUser!.uid.toString(),
-        super(key: key);
-  final _db = FirebaseFirestore.instance.collection('notes');
-  final String _uid;
+  NotesPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _db.where('userID', isEqualTo: _uid).snapshots(),
+      stream: context.read<FirebaseService>().notestream,
       builder: (context, snapshot) {
-        if (snapshot.hasError) return Text('Something went wrong');
+        if (snapshot.hasError) {
+          print(snapshot.error.toString());
+          return Text(snapshot.error.toString());
+        }
+        ;
         if (snapshot.connectionState == ConnectionState.waiting)
           return Center(child: Text("Loading"));
         if (!snapshot.hasData)
@@ -30,19 +31,9 @@ class NotesPage extends StatelessWidget {
               (DocumentSnapshot doc) {
                 Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
                 return NoteGrid(
-                    note: Note.fromMap(data),
-                    id: doc.id,
-                    onTapFunction: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => NoteEditor(
-                            id: doc.id,
-                            note: Note.fromMap(data),
-                          ),
-                        ),
-                      );
-                    });
+                  note: Note.fromMap(data),
+                  id: doc.id,
+                );
               },
             ).toList(),
           ),
@@ -53,14 +44,26 @@ class NotesPage extends StatelessWidget {
 }
 
 class NoteGrid extends StatelessWidget {
-  NoteGrid({required this.note, required this.id, required this.onTapFunction});
+  NoteGrid({
+    required this.note,
+    required this.id,
+  });
   final String id;
   final Note note;
-  final VoidCallback onTapFunction;
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTapFunction,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => NoteEditor(
+              id: id,
+              note: note,
+            ),
+          ),
+        );
+      },
       child: Card(
         color: Colors.grey[200],
         margin: EdgeInsets.all(6),
