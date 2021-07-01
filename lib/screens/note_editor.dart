@@ -132,6 +132,7 @@ class _NoteEditorState extends State<NoteEditor> {
               child: TextField(
                 controller: _titleControler,
                 textCapitalization: TextCapitalization.sentences,
+                maxLength: 50,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 18,

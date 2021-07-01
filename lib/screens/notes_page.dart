@@ -16,7 +16,6 @@ class NotesPage extends StatelessWidget {
           print(snapshot.error.toString());
           return Text(snapshot.error.toString());
         }
-        ;
         if (snapshot.connectionState == ConnectionState.waiting)
           return Center(child: Text("Loading"));
         if (!snapshot.hasData)
@@ -68,6 +67,7 @@ class NoteGrid extends StatelessWidget {
         color: Colors.grey[200],
         margin: EdgeInsets.all(6),
         clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: Padding(
           padding: EdgeInsets.all(6),
           child: Column(

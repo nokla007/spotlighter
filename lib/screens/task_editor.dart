@@ -93,6 +93,8 @@ class _TaskEditorState extends State<TaskEditor> {
               child: TextField(
                 controller: _titleControler,
                 textCapitalization: TextCapitalization.sentences,
+                maxLines: 2,
+                maxLength: 50,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
