@@ -135,8 +135,8 @@ class _NoteEditorState extends State<NoteEditor> {
                   textCapitalization: TextCapitalization.sentences,
                   maxLength: 50,
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
+                    //fontWeight: FontWeight.w500,
+                    fontSize: 16,
                   ),
                   decoration: InputDecoration(
                     hintText: 'Title',
@@ -152,7 +152,7 @@ class _NoteEditorState extends State<NoteEditor> {
                   textCapitalization: TextCapitalization.sentences,
                   maxLines: 12,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                   decoration: InputDecoration(
                     hintText: 'Description',

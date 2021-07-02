@@ -97,8 +97,8 @@ class _TaskEditorState extends State<TaskEditor> {
                   maxLines: 1,
                   maxLength: 50,
                   style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
                   ),
                   decoration: InputDecoration(
                     hintText: 'Title',

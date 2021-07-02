@@ -12,8 +12,9 @@ class SignUpPage extends StatelessWidget {
   final _passwordController = TextEditingController();
   final _cpasswordController = TextEditingController();
 
-  SignUpPage({Key? key,})
-      : super(key: key);
+  SignUpPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class SignUpPage extends StatelessWidget {
                 labelText: 'Email',
               ),
             ),
-            const  SizedBox(
+            const SizedBox(
               height: kFormFieldSpacing,
             ),
             TextFormField(
@@ -100,6 +101,7 @@ class SignUpPage extends StatelessWidget {
                         email: _emailController.text,
                         password: _passwordController.text,
                         username: _usernameController.text);
+                    context.read<AuthModeProvider>().clearError();
                   } on FirebaseAuthException catch (e) {
                     String error =
                         context.read<FirebaseService>().showError(e.code);
@@ -112,7 +114,9 @@ class SignUpPage extends StatelessWidget {
                     print('error');
                   }
                 } else {
-                  context.read<AuthModeProvider>().setError("Password doesn't match");
+                  context
+                      .read<AuthModeProvider>()
+                      .setError("Password doesn't match");
                 }
               },
             ),

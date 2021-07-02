@@ -18,4 +18,9 @@ class AuthModeProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void clearError() {
+    _errorText = '';
+    notifyListeners();
+  }
 }

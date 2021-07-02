@@ -73,6 +73,7 @@ class SignInPage extends StatelessWidget {
                   await context.read<FirebaseService>().signIn(
                       email: _emailController.text,
                       password: _passwordController.text);
+                  context.read<AuthModeProvider>().clearError();
                 } on FirebaseAuthException catch (e) {
                   //onError(e.message);
                   String error =
