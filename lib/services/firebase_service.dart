@@ -15,16 +15,8 @@ class FirebaseService {
 
   String? get getEmail => _auth.currentUser!.email;
 
-  Stream<QuerySnapshot> get notestream => _db
-      .collection('notes')
-      .where('userID', isEqualTo: _auth.currentUser!.uid)
-      .orderBy('created', descending: false)
-      .snapshots();
+  String? get getName => _auth.currentUser!.displayName;
 
-  Stream<QuerySnapshot> get taskstream => _db
-      .collection('tasks')
-      .where('userID', isEqualTo: _auth.currentUser!.uid)
-      .snapshots();
 
   Future<void> signOut() async {
     try {
@@ -43,6 +35,25 @@ class FirebaseService {
     }
   }
 
+  // Future<void> signUp(
+  //     {required String email,
+  //     required String password,
+  //     required String username}) async {
+  //   try {
+  //     await _auth
+  //         .createUserWithEmailAndPassword(email: email, password: password)
+  //         .then((value) async {
+  //       await _db
+  //           .collection('userData')
+  //           .doc(value.user!.uid)
+  //           .set({'userName': username});
+  //     });
+  //   } on FirebaseAuthException catch (e) {
+  //     throw e;
+  //   } on FirebaseException catch (e) {
+  //     throw e;
+  //   }
+  // }
   Future<void> signUp(
       {required String email,
       required String password,
@@ -51,17 +62,40 @@ class FirebaseService {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
-        await _db
-            .collection('userData')
-            .doc(value.user!.uid)
-            .set({'userName': username});
+        await value.user!.updateDisplayName(username);
       });
     } on FirebaseAuthException catch (e) {
       throw e;
-    } on FirebaseException catch (e) {
+    }
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    try {
+      await _auth.currentUser!.updatePassword(newPassword);
+    } on FirebaseAuthException catch (e) {
       throw e;
     }
   }
+
+  Future<void> updateUserName(String name) async {
+    try {
+      await _auth.currentUser!.updateDisplayName(name);
+    } on FirebaseAuthException catch (e) {
+      throw e;
+    }
+  }
+
+  Stream<QuerySnapshot> get notestream => _db
+      .collection('notes')
+      .where('userID', isEqualTo: _auth.currentUser!.uid)
+      .orderBy('created', descending: true)
+      .snapshots();
+
+  Stream<QuerySnapshot> get taskstream => _db
+      .collection('tasks')
+      .where('userID', isEqualTo: _auth.currentUser!.uid)
+      .orderBy('created', descending: true)
+      .snapshots();
 
   Future<void> createNote(Note note) async {
     try {

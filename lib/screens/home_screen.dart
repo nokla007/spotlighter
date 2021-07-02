@@ -6,6 +6,7 @@ import 'package:spotlighter1/screens/note_editor.dart';
 import 'package:spotlighter1/screens/notes_page.dart';
 import 'package:spotlighter1/screens/task_editor.dart';
 import 'package:spotlighter1/screens/tasks_page.dart';
+import 'package:spotlighter1/screens/user_page.dart';
 import 'package:spotlighter1/services/firebase_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -46,12 +47,13 @@ class _HomeScreenState extends State<HomeScreen> {
           _titles[_selectedIndex],
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              print('search');
-            },
-            icon: Icon(Icons.search),
-          )
+          // TODO: Implemet Search Functionality.
+          // IconButton(
+          //   onPressed: () {
+          //     print('search');
+          //   },
+          //   icon: Icon(Icons.search),
+          // ),
         ],
       ),
       drawer: NavDrawer(
@@ -113,7 +115,7 @@ class NavDrawer extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Spotlighter',
-                    style: TextStyle(fontSize: 40),
+                    style: TextStyle(fontSize: 36),
                   ),
                 ),
               ),
@@ -122,7 +124,7 @@ class NavDrawer extends StatelessWidget {
                 tileColor: (index == 0) ? Colors.black26 : null,
                 title: const Text(
                   'Notes',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 18),
                 ),
                 leading: const Icon(Icons.note_alt_outlined),
                 onTap: () {
@@ -134,7 +136,7 @@ class NavDrawer extends StatelessWidget {
                 tileColor: (index == 1) ? Colors.black26 : null,
                 title: const Text(
                   'Tasks',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(fontSize: 18),
                 ),
                 leading: const Icon(Icons.task_outlined),
                 onTap: () {
@@ -147,9 +149,17 @@ class NavDrawer extends StatelessWidget {
               Expanded(child: Container()),
               kDivider,
               ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => UserPage(),
+                    ),
+                  );
+                },
                 title: Text(
-                  'User',
-                  style: TextStyle(fontSize: 24),
+                  context.read<FirebaseService>().getName ?? 'User',
+                  style: TextStyle(fontSize: 18),
                 ),
                 subtitle: Text(
                   context.read<FirebaseService>().getEmail ?? 'Not Signed In',

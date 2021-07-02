@@ -84,49 +84,74 @@ class _TaskEditorState extends State<TaskEditor> {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                controller: _titleControler,
-                textCapitalization: TextCapitalization.sentences,
-                maxLines: 2,
-                maxLength: 50,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Title',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(12),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextField(
+                  controller: _titleControler,
+                  textCapitalization: TextCapitalization.sentences,
+                  maxLines: 1,
+                  maxLength: 50,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Title',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.all(12),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  'High Priority',
-                  style: TextStyle(fontSize: 20),
-                ),
-                Switch(
-                  value: _priority,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _priority = value;
-                    });
-                  },
-                )
-              ],
-            ),
-          ],
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'High Priority',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(
+                    width: 60,
+                    child: Switch(
+                      value: _priority,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _priority = value;
+                        });
+                      },
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     Text(
+              //       'Schedule',
+              //       style: TextStyle(fontSize: 20),
+              //     ),
+              //     SizedBox(
+              //       width: 60,
+              //       child: IconButton(
+              //         iconSize: 28,
+              //         onPressed: () {},
+              //         icon: Icon(Icons.date_range_rounded),
+              //       ),
+              //     )
+              //   ],
+              // ),
+            ],
+          ),
         ),
       ),
     );
