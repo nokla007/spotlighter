@@ -150,6 +150,7 @@ class NavDrawer extends StatelessWidget {
               kDivider,
               ListTile(
                 onTap: () {
+                  Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -170,6 +171,7 @@ class NavDrawer extends StatelessWidget {
                 ),
                 trailing: IconButton(
                   onPressed: () {
+                    Navigator.pop(context);
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -177,7 +179,6 @@ class NavDrawer extends StatelessWidget {
                         actions: [
                           TextButton(
                             onPressed: () {
-                              Navigator.pop(context);
                               Navigator.pop(context);
                             },
                             child: Text('Cancel'),

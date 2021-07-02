@@ -35,9 +35,10 @@ class UserPage extends StatelessWidget {
                     TextButton(
                       onPressed: () async {
                         Navigator.pop(context);
+                        Navigator.pop(context);
                         try {
                           await context.read<FirebaseService>().signOut();
-                          Navigator.pop(context);
+                          
                         } on FirebaseAuthException catch (e) {
                           print(e.message);
                         }
@@ -50,7 +51,7 @@ class UserPage extends StatelessWidget {
             },
             icon: Icon(
               Icons.logout,
-              size: 28,
+              //size: 28,
             ),
           ),
         ],
@@ -89,7 +90,6 @@ class UserPage extends StatelessWidget {
                             context
                                 .read<FirebaseService>()
                                 .updateUserName(_nameController.text);
-                            Navigator.pop(context);
                             Navigator.pop(context);
                           } on FirebaseAuthException catch (e) {
                             print(e.message);
@@ -161,7 +161,6 @@ class UserPage extends StatelessWidget {
                             context
                                 .read<FirebaseService>()
                                 .updatePassword(_passController.text);
-                            Navigator.pop(context);
                             Navigator.pop(context);
                           } on FirebaseAuthException catch (e) {
                             print(e.message);
