@@ -140,7 +140,7 @@ class NavDrawer extends StatelessWidget {
                 ),
                 leading: const Icon(Icons.task_outlined),
                 onTap: () {
-                  print('1');
+                  //print('1');
                   Navigator.pop(context);
                   toggleIndex(1);
                 },

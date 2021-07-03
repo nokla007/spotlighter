@@ -19,7 +19,7 @@ class TaskTile extends StatelessWidget {
         leading: Checkbox(
           value: task.isDone,
           onChanged: (value) {
-            print(value);
+            //print(value);
             task.toggleDone(value);
             try {
               context.read<FirebaseService>().editTask(task, id);
@@ -38,7 +38,6 @@ class TaskTile extends StatelessWidget {
           ),
         ),
         onTap: () {
-          print(task.highPriority);
           Navigator.push(
             context,
             MaterialPageRoute(

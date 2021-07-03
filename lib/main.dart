@@ -40,18 +40,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class EmptyPage extends StatelessWidget {
-  const EmptyPage({Key? key}) : super(key: key);
+// class EmptyPage extends StatelessWidget {
+//   const EmptyPage({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Project Initialized'),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Center(
+//         child: Text('Project Initialized'),
+//       ),
+//     );
+//   }
+// }
 
 class AuthenticationWraper extends StatelessWidget {
   const AuthenticationWraper({Key? key}) : super(key: key);

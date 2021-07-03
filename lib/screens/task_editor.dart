@@ -50,8 +50,39 @@ class _TaskEditorState extends State<TaskEditor> {
           if (_editing == true)
             IconButton(
               onPressed: () {
-                //delete task
-                print('delete task');
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Delete Task?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          if (_editing) {
+                            try {
+                              context
+                                  .read<FirebaseService>()
+                                  .deleteTask(widget.id);
+                              Navigator.pop(context);
+                            } on FirebaseException catch (e) {
+                              print(e.message);
+                            }
+                          }
+                        },
+                        child: Text('Ok'),
+                      ),
+                    ],
+                  ),
+                );
               },
               icon: Icon(Icons.delete_rounded),
             ),
@@ -130,9 +161,9 @@ class _TaskEditorState extends State<TaskEditor> {
                   )
                 ],
               ),
-              SizedBox(
-                height: 20,
-              ),
+              // SizedBox(
+              //   height: 20,
+              // ),
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.end,
               //   children: [
