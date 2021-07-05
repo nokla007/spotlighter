@@ -91,7 +91,7 @@ class _TaskEditorState extends State<TaskEditor> {
               //ADD TASK
               if (_editing) {
                 Task task = widget.task!;
-                task.update(_titleControler.text, _priority);
+                task.update(title: _titleControler.text, priority: _priority);
                 try {
                   context.read<FirebaseService>().editTask(task, widget.id);
                 } on FirebaseException catch (e) {
@@ -169,13 +169,15 @@ class _TaskEditorState extends State<TaskEditor> {
               //   children: [
               //     Text(
               //       'Schedule',
-              //       style: TextStyle(fontSize: 20),
+              //       style: TextStyle(fontSize: 18),
               //     ),
               //     SizedBox(
               //       width: 60,
               //       child: IconButton(
-              //         iconSize: 28,
-              //         onPressed: () {},
+              //         iconSize: 24,
+              //         onPressed: () {
+                        
+              //         },
               //         icon: Icon(Icons.date_range_rounded),
               //       ),
               //     )

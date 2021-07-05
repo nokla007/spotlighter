@@ -47,13 +47,13 @@ class _HomeScreenState extends State<HomeScreen> {
           _titles[_selectedIndex],
         ),
         actions: [
-          // TODO: Implemet Search Functionality.
-          // IconButton(
-          //   onPressed: () {
-          //     print('search');
-          //   },
-          //   icon: Icon(Icons.search),
-          // ),
+          // TODO: Implement Search Functionality.
+          IconButton(
+            onPressed: () {
+              print('search');
+            },
+            icon: Icon(Icons.search),
+          ),
         ],
       ),
       drawer: NavDrawer(

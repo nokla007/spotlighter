@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SliverText extends StatelessWidget {
-  const SliverText({Key? key, required this.text}) : super(key: key);
+  SliverText(this.text);
   final String text;
 
   @override

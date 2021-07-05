@@ -33,10 +33,13 @@ class TaskTile extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           maxLines: 2,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 16,
             decoration: (task.isDone) ? TextDecoration.lineThrough : null,
           ),
         ),
+        subtitle: (task.scheduleTime == null)
+            ? null
+            : ShowSchedule(schedule: task.scheduleTime!),
         onTap: () {
           Navigator.push(
             context,
@@ -50,6 +53,34 @@ class TaskTile extends StatelessWidget {
         },
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    );
+  }
+}
+
+class ShowSchedule extends StatelessWidget {
+  const ShowSchedule({Key? key, required this.schedule}) : super(key: key);
+  final DateTime schedule;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 8),
+      child: Row(
+        children: [
+          Icon(
+            Icons.access_time_outlined,
+            color: Colors.orangeAccent,
+            size: 16,
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Text(
+            schedule.toLocal().toIso8601String(),
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -79,3 +110,6 @@ class TaskList {
     return list;
   }
 }
+
+
+//Text( task.scheduleTime!.toLocal().toIso8601String()),
