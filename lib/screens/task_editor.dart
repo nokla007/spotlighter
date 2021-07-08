@@ -39,7 +39,6 @@ class _TaskEditorState extends State<TaskEditor> {
     return Scaffold(
       appBar: AppBar(
         title: (!_editing) ? Text('Add Task') : null,
-        backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: Icon(Icons.close),
           onPressed: () {
@@ -91,7 +90,7 @@ class _TaskEditorState extends State<TaskEditor> {
               //ADD TASK
               if (_editing) {
                 Task task = widget.task!;
-                task.update(title: _titleControler.text, priority: _priority);
+                task.update(title: _titleControler.text.trim(), priority: _priority);
                 try {
                   context.read<FirebaseService>().editTask(task, widget.id);
                 } on FirebaseException catch (e) {
@@ -100,7 +99,7 @@ class _TaskEditorState extends State<TaskEditor> {
               } else {
                 Task newTask = Task(
                   userID: context.read<FirebaseService>().getUID,
-                  title: _titleControler.text,
+                  title: _titleControler.text.trim(),
                   highPriority: _priority,
                 );
                 try {
@@ -133,9 +132,10 @@ class _TaskEditorState extends State<TaskEditor> {
                   ),
                   decoration: InputDecoration(
                     hintText: 'Title',
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.all(12),
+                    // border: OutlineInputBorder(),
+                    // contentPadding: EdgeInsets.all(12),
                   ),
+                  textInputAction: TextInputAction.done,
                 ),
               ),
               SizedBox(
@@ -176,7 +176,7 @@ class _TaskEditorState extends State<TaskEditor> {
               //       child: IconButton(
               //         iconSize: 24,
               //         onPressed: () {
-                        
+
               //         },
               //         icon: Icon(Icons.date_range_rounded),
               //       ),

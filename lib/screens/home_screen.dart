@@ -45,6 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(
           _titles[_selectedIndex],
+          // style: Theme.of(context)
+          //     .textTheme
+          //     .headline6!
+          //     .copyWith(color: Colors.white),
         ),
         actions: [
           // TODO: Implement Search Functionality.
@@ -62,11 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: getPage(_selectedIndex),
       bottomNavigationBar: BottomAppBar(
+        elevation: 1,
         shape: CircularNotchedRectangle(),
         notchMargin: 6,
         clipBehavior: Clip.antiAlias,
         child: BottomNavigationBar(
-          backgroundColor: Colors.grey[100],
+          elevation: 3,
           items: [
             BottomNavigationBarItem(
               icon: Icon(
@@ -78,8 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(Icons.task_alt_outlined), label: 'Tasks'),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.black87,
-          unselectedItemColor: Colors.black45,
+          //selectedItemColor: Colors.black87,
+          //unselectedItemColor: Colors.black45,
           onTap: (index) {
             setState(() {
               _selectedIndex = index;
@@ -121,7 +126,11 @@ class NavDrawer extends StatelessWidget {
               ),
               kDivider,
               ListTile(
-                tileColor: (index == 0) ? Colors.black26 : null,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                tileColor:
+                    (index == 0) ? Theme.of(context).primaryColorLight : null,
                 title: const Text(
                   'Notes',
                   style: TextStyle(fontSize: 18),
@@ -133,7 +142,11 @@ class NavDrawer extends StatelessWidget {
                 },
               ),
               ListTile(
-                tileColor: (index == 1) ? Colors.black26 : null,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                tileColor:
+                    (index == 1) ? Theme.of(context).primaryColorLight : null,
                 title: const Text(
                   'Tasks',
                   style: TextStyle(fontSize: 18),

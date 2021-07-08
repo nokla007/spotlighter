@@ -11,39 +11,44 @@ class NoteGrid extends StatelessWidget {
   final Note note;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => NoteEditor(
-              id: id,
-              note: note,
+    return Card(
+      margin: EdgeInsets.all(6),
+      clipBehavior: Clip.antiAlias,
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => NoteEditor(
+                id: id,
+                note: note,
+              ),
             ),
-          ),
-        );
-      },
-      child: Card(
-        color: Colors.grey[200],
-        margin: EdgeInsets.all(6),
-        clipBehavior: Clip.antiAlias,
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          );
+        },
         child: Padding(
-          padding: EdgeInsets.all(6),
+          padding: EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (note.title != '')
                 Text(
                   note.title,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  // style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                   maxLines: 2,
                 ),
+              SizedBox(height: 6),
               Flexible(
                 child: Text(
                   note.text,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                  // style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                  style: Theme.of(context).textTheme.bodyText2,
                   overflow: TextOverflow.clip,
                 ),
               ),

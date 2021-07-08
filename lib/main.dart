@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:spotlighter1/providers/auth_mode_provider.dart';
 import 'package:spotlighter1/screens/authentication_screen.dart';
@@ -31,9 +32,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.grey,
-        ),
+        theme: themeData,
         home: AuthenticationWraper(),
       ),
     );
@@ -72,3 +71,38 @@ class AuthenticationWraper extends StatelessWidget {
     );
   }
 }
+
+ThemeData themeData = ThemeData(
+  brightness: Brightness.light,
+  primarySwatch: Colors.indigo,
+  primaryColor: Colors.indigo[300],
+  accentColor: Colors.indigoAccent,
+  primaryColorLight: Color(0xffaab6fe),
+  primaryColorDark: Color(0xff49599a),
+  scaffoldBackgroundColor: Colors.grey[200],
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    backgroundColor: Color(0xff49599a),
+    elevation: 2,
+    selectedItemColor: Colors.orange[400],
+    unselectedItemColor: Colors.grey[400],
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(6),
+    ),
+    contentPadding: EdgeInsets.all(10),
+    fillColor: Colors.white,
+    filled: true,
+    focusColor: Colors.indigo[200],
+  ),
+  visualDensity: VisualDensity.comfortable,
+  textTheme: GoogleFonts.notoSansTextTheme(),
+  appBarTheme: AppBarTheme(
+    textTheme: GoogleFonts.notoSansTextTheme().copyWith(
+        title: TextStyle(
+      fontSize: 20,
+      //fontWeight: FontWeight.w500,
+      color: Colors.white,
+    )),
+  ),
+);

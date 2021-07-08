@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +45,6 @@ class _NoteEditorState extends State<NoteEditor> {
     return Scaffold(
       appBar: AppBar(
         title: (!_editing) ? Text('Add Note') : null,
-        backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: Icon(Icons.close),
           onPressed: () {
@@ -97,7 +95,7 @@ class _NoteEditorState extends State<NoteEditor> {
             onPressed: () async {
               if (_editing) {
                 Note note = widget.note!;
-                note.update(_titleControler.text, _textControler.text, _pinned);
+                note.update(_titleControler.text.trim(), _textControler.text.trim(), _pinned);
                 try {
                   context.read<FirebaseService>().editNote(note, widget.id);
                 } on FirebaseException catch (e) {
@@ -106,8 +104,8 @@ class _NoteEditorState extends State<NoteEditor> {
               } else {
                 Note newNote = Note(
                   userID: context.read<FirebaseService>().getUID,
-                  title: _titleControler.text,
-                  text: _textControler.text,
+                  title: _titleControler.text.trim(),
+                  text: _textControler.text.trim(),
                   pin: _pinned,
                 );
                 try {
