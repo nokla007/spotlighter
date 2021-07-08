@@ -99,6 +99,7 @@ ThemeData themeData = ThemeData(
   textTheme: GoogleFonts.notoSansTextTheme(),
   appBarTheme: AppBarTheme(
     textTheme: GoogleFonts.notoSansTextTheme().copyWith(
+        // ignore: deprecated_member_use
         title: TextStyle(
       fontSize: 20,
       //fontWeight: FontWeight.w500,

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nokla007.spotlighter1">
    <application
-        android:label="spotlighter1"
+        android:label="Spotlighter"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
