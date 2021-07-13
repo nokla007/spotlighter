@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:spotlighter1/constants.dart';
 import 'package:spotlighter1/screens/note_editor.dart';
@@ -34,9 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void toggleIndex(int i) {
-    setState(() {
-      _selectedIndex = i;
-    });
+    if (_selectedIndex != i) {
+      setState(() {
+        _selectedIndex = i;
+      });
+    }
   }
 
   @override
@@ -45,10 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(
           _titles[_selectedIndex],
-          // style: Theme.of(context)
-          //     .textTheme
-          //     .headline6!
-          //     .copyWith(color: Colors.white),
         ),
         actions: [
           // TODO: Implement Search Functionality.
@@ -56,7 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               print('search');
             },
-            icon: Icon(Icons.search),
+            icon: Icon(
+              Icons.search,
+            ),
           ),
         ],
       ),
@@ -66,12 +67,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: getPage(_selectedIndex),
       bottomNavigationBar: BottomAppBar(
-        elevation: 1,
+        elevation: 2,
         shape: CircularNotchedRectangle(),
-        notchMargin: 6,
+        notchMargin: 4,
         clipBehavior: Clip.antiAlias,
         child: BottomNavigationBar(
-          elevation: 3,
           items: [
             BottomNavigationBarItem(
               icon: Icon(
@@ -86,9 +86,11 @@ class _HomeScreenState extends State<HomeScreen> {
           //selectedItemColor: Colors.black87,
           //unselectedItemColor: Colors.black45,
           onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
+            if (index != _selectedIndex) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            }
           },
         ),
       ),
@@ -110,17 +112,27 @@ class NavDrawer extends StatelessWidget {
     return Drawer(
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: 100,
-                child: const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Spotlighter',
-                    style: TextStyle(fontSize: 36),
+                height: MediaQuery.of(context).size.height / 9,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Spotlighter',
+                      style: TextStyle(
+                        fontSize: 36,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                      // style: GoogleFonts.montserrat(
+                      //   fontSize: 40,
+                      //   color: Theme.of(context).primaryColorDark,
+                      // ),
+                    ),
                   ),
                 ),
               ),

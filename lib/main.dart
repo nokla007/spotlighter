@@ -81,10 +81,11 @@ ThemeData themeData = ThemeData(
   primaryColorDark: Color(0xff49599a),
   scaffoldBackgroundColor: Colors.grey[200],
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    backgroundColor: Color(0xff49599a),
+    //backgroundColor: Color(0xff49599a),
+    backgroundColor: Colors.white,
     elevation: 2,
-    selectedItemColor: Colors.orange[400],
-    unselectedItemColor: Colors.grey[400],
+    selectedItemColor: Colors.indigoAccent,
+    unselectedItemColor: Colors.grey,
   ),
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
@@ -102,8 +103,8 @@ ThemeData themeData = ThemeData(
         // ignore: deprecated_member_use
         title: TextStyle(
       fontSize: 20,
-      //fontWeight: FontWeight.w500,
-      color: Colors.white,
+      // fontWeight: FontWeight.w500,
+      //color: Colors.white,
     )),
   ),
 );
